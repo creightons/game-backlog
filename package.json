@@ -1,0 +1,16 @@
+{
+  "name": "game-backlog",
+  "version": "1.0.0",
+  "description": "Practice app to create a backlog of games",
+  "main": "server.js",
+  "dependencies": {
+    "body-parser": "^1.16.1",
+    "express": "^4.14.1",
+    "igdb-api-node": "^2.0.2",
+    "pug": "^2.0.0-beta11"
+  },
+  "devDependencies": {},
+  "scripts": {},
+  "author": "",
+  "license": "ISC"
+}
