@@ -9,10 +9,16 @@ const GameSchema = mongoose.Schema({
 		height: Number,
 		width: Number,
 	},
+
 });
 
 const BacklogSchema = mongoose.Schema({
 	games: [GameSchema],
+	_owner: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'User',
+		required: true,
+	},
 });
 
 var Backlog = mongoose.model('Backlog', BacklogSchema);
