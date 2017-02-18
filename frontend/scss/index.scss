@@ -1,0 +1,15 @@
+$navbar-height: 80px;
+$primary-color: green;
+$text-color: white;
+
+.navbar {
+	height: $navbar-height;
+	background-color: $primary-color;
+}
+
+.header {
+	font-size: 36px;
+	color: $text-color;
+	text-align: center;
+	line-height: $navbar-height;
+}

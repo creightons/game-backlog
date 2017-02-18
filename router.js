@@ -22,8 +22,6 @@ module.exports = function(app) {
 
 	app.use(userRouter);
 
-	var results = [{name: 'test1'}, {name: 'test2'}, {name: 'test3'},]
-
 	function searchIGDB(req, res) {
 		const searchValue  = req.query.value;
 

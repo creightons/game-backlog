@@ -26,6 +26,9 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// Setup Static Directory
+app.use(express.static('public'));
+
 // Setup PassportJS
 require('./passport.config')(passport),
 app.use(passport.initialize());
