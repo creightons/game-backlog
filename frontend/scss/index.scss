@@ -2,14 +2,45 @@ $navbar-height: 80px;
 $primary-color: green;
 $text-color: white;
 
+$section-spacing: 20px;
+
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;	
+}
+
 .navbar {
 	height: $navbar-height;
 	background-color: $primary-color;
+	margin-bottom: $section-spacing;
 }
 
-.header {
+.navbar-header {
 	font-size: 36px;
 	color: $text-color;
 	text-align: center;
 	line-height: $navbar-height;
+}
+
+.sign-in-link {
+	position: absolute;
+	right: 10px;
+	top: 0;
+	font-size: 20px;
+	cursor: pointer;
+}
+
+.search-component {
+	width: 80%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.search-input {
+	width: 80%;
+}
+
+.search-button {
+	width: 20%;
 }

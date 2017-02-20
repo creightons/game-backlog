@@ -6,11 +6,12 @@ html
 		link(rel='stylesheet' href='index.css')
 	body
 		nav.navbar
-			h1.header Game Backlogs
-			div Sign In
-		section
+			h1.navbar-header Game Backlogs
+				div.sign-in-link Sign In
+		main
 			div.search-component
-				input(type='text' name='value').search-bar
-				div.search-button Search
-
+				div
+					input.search-input(type='text' name='value')
+					button.search-button Search
+				div.search-results
 		script(src='build.js')

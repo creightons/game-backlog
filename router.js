@@ -21,6 +21,12 @@ module.exports = function(app) {
 	}
 
 	app.use('/user', userRoutes);
-	app.get('/igdb', igdbRoutes);
+	app.use('/igdb', igdbRoutes);
 	app.use('/game', isAuthenticated, gameRoutes)
+
+	// Print Errors
+	app.use((err, req, res, next) => {
+		console.log("Server Error", err);
+		next();
+	});
 };
