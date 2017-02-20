@@ -8,6 +8,7 @@ function extendPrototype(destView, sourceView ) {
 // Apply fetch API to the global space
 require('es6-promise').polyfill();
 require('isomorphic-fetch');
+const Promise = require('bluebird');
 
 const BaseView = function() {};
 
@@ -57,8 +58,7 @@ SearchView.prototype = {
 
 	renderSearchResults: function() {
 		const self = this;
-		Controller.searchIGDB(self.searchInput.value).then(results => {
-			const gameDataResults = results.body;
+		Controller.searchByTerm(self.searchInput.value).then(gameDataResults => {
 			gameDataResults.forEach(gameData => {
 				const ResultView = new SearchResultView(gameData);
 
@@ -86,7 +86,7 @@ SearchResultView.prototype = {
 		}
 
 		const htmlString = `
-			<img src='${imageUrl}'>
+			<img width='90' height='90' src='${imageUrl}'>
 			<span>${this.gameData.name}</span>
 		`;
 
@@ -103,22 +103,99 @@ let Controller = {
 		new SearchView();
 	},
 
-	searchIGDB: function(value) {
-		const URL = `/igdb?value=${value}`;
+	searchByTerm: function(newSearchTerm) {
+		Store.searchState.currentPage = 1;
+		Store.searchState.currentSearchTerm = newSearchTerm;
+		Store.searchState.searchResults = {};
+
+		return Controller.searchIGDB(
+			Store.searchState.currentSearchTerm,
+			Store.searchState.currentPage
+		);
+	},
+
+	// Search IGDB and control pagination
+	searchIGDB: function(searchTerm, pageNumber) {
+		const URL = `/igdb/${searchTerm}/${pageNumber}`;
+
 		return fetch(URL, {
 			headers: {
 				'Content-Type': 'application/json',
 			}
 		}).then(
 			res => res.json()
-		).catch(err => {
+		).then(resultsData => {
+			Store.searchState.searchResults[pageNumber] = resultsData.body;
+			return resultsData.body;
+		}).catch(err => {
 			console.log(err);
 		});
 	},
+
+	nextPage: function() {
+		if (!(
+			Store.searchState.currentSearchTerm
+			&& Store.searchState.currentPage
+		)) { return; }
+
+		// Augment the current page number
+		Store.searchState.currentPage++;
+		
+		// Check if data has been cached for the current pagination level
+		// of the current search term 
+		const cachedData = Store.searchData.searchResults[
+			Store.searchData.currentPage
+		];
+
+		if (Array.isArray(cacheData)) {
+			return Promise.resolve(cachedData);
+		}
+
+		return Controller.searchIGDB(
+			Store.searchState.currentSearchTerm,
+			Store.searchState.currentPage
+		);
+	},
+
+
+	previousPage: function() {
+		if (!(
+			Store.searchState.currentSearchTerm
+			&& Store.searchState.currentPage
+		)) { return; }
+
+		// Augment the current page number
+		if (Store.searchState.currentPage > 1) {
+			Store.searchState.currentPage--;
+		}
+
+		// Check if data has been cached for the current pagination level
+		// of the current search term 
+		const cachedData = Store.searchData.searchResults[
+			Store.searchData.currentPage
+		];
+
+		if (Array.isArray(cacheData)) {
+			return Promise.resolve(cachedData);
+		}
+
+		return Controller.searchIGDB(
+			Store.searchState.currentSearchTerm,
+			Store.searchState.currentPage
+		);
+	},
 };
 
-//
-let Store = {};
+
+// State Store for the application
+let Store = {
+	searchState: {
+		currentSearchTerm: undefined,
+		currentPage: undefined,
+		searchResults: {},
+	},
+
+};
 
 // Setup page
 Controller.init();
