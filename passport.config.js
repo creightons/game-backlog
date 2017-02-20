@@ -1,5 +1,5 @@
 const LocalStrategy = require('passport-local').Strategy,
-	User = require('./user.model');
+	User = require('./api/user.model');
 
 
 function startPassport (passport) {

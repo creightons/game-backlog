@@ -1,8 +1,14 @@
 const passport = require('passport'),
-	igdb = require('igdb-api-node'),
-	userRouter = require('./user.routes');
+	userRoutes = require('./api/user.routes'),
+	gameRoutes = require('./api/game.routes'),
+	igdbRoutes = require('./api/igdb.routes');
 
 module.exports = function(app) {
+
+	// Render page
+	app.get('/', (req, res, next) => {
+		res.status(200).render('index');
+	});
 
 	// Login route; sends a 401 status if authentication failed
 	app.post('/login', passport.authenticate('local'), (req, res) => {
@@ -14,28 +20,7 @@ module.exports = function(app) {
 		return res.status(500).send();
 	}
 
-	app.get('/', (req, res) => res.render('index') );
-
-	app.get('/search', (req, res) => {
-		searchIGDB(req, res);
-	});
-
-	app.use(userRouter);
-
-	function searchIGDB(req, res) {
-		const searchValue  = req.query.value;
-
-		if (!searchValue) {
-			res.render('index');
-		}
-		else {
-			igdb.games({
-				search: searchValue,
-				limit: 15,
-				fields: 'name',
-			}).then(results => {
-				res.render('index', { results: results.body });
-			});
-		}
-	}
-}
+	app.use('/user', userRoutes);
+	app.get('/igdb', igdbRoutes);
+	app.use('/game', isAuthenticated, gameRoutes)
+};

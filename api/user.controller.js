@@ -1,5 +1,4 @@
-const User = require('./user.model'),
-	Backlog = require('./backlog.model');
+const User = require('./user.model');
 
 function badReq(res) { res.status(400).send(); }
 
@@ -17,14 +16,8 @@ function signUp(req, res, next) {
 		const newUser = User({ username, password });
 
 		return newUser.save().then(() => {
-			return newUser._id;
+			return res.status(200).send();
 		});			
-	}).then(userId => {
-		var newBacklog = Backlog({ _owner: userId });
-
-		return newBacklog.save();
-	}).then(() => {
-		return res.status(200).send();
 	}).catch(err => {
 		next(err);
 	});

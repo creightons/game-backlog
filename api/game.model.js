@@ -9,11 +9,6 @@ const GameSchema = mongoose.Schema({
 		height: Number,
 		width: Number,
 	},
-
-});
-
-const BacklogSchema = mongoose.Schema({
-	games: [GameSchema],
 	_owner: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'User',
@@ -21,6 +16,6 @@ const BacklogSchema = mongoose.Schema({
 	},
 });
 
-var Backlog = mongoose.model('Backlog', BacklogSchema);
+var Game = mongoose.model('Game', GameSchema);
 
-module.exports = Backlog;
+module.exports = Game;
