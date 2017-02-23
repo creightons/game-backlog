@@ -44,3 +44,21 @@ $section-spacing: 20px;
 .search-button {
 	width: 20%;
 }
+
+.search-results {
+	margin-bottom: $section-spacing;
+}
+
+
+.search-controls {
+	display: flex;
+	justify-content: space-between;
+}
+.button {
+	padding: 20px;
+	width: 130px;
+	text-align: center;
+	color: white;
+	background-color: green;
+	cursor: pointer;
+}

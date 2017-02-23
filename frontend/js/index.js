@@ -8,7 +8,12 @@ function extendPrototype(destView, sourceView ) {
 // Apply fetch API to the global space
 require('es6-promise').polyfill();
 require('isomorphic-fetch');
-const Promise = require('bluebird');
+const Promise = require('bluebird'),
+	PubSub = require('pubsub-js');
+
+// PUBSUB TOPICS
+const UPDATE_CURRENT_SEARCH_RESULTS = 'UPDATE_CURRENT_SEARCH_RESULTS';
+
 
 const BaseView = function() {};
 
@@ -49,45 +54,58 @@ SearchView.prototype = {
 	init: function() {		
 		this.searchInput = document.querySelector('.search-input');
 		this.searchButton = document.querySelector('.search-button');
-		this.searchResults = document.querySelector('.search-results');
+		this.searchResultsList = document.querySelector('.search-results');
+		this.nextButton = document.querySelector('.search-controls .next');
+		this.previousButton = document.querySelector('.search-controls .previous');
 		
-		const renderSearchResults = this.renderSearchResults.bind(this);
+		const self = this;
+		self.addListener(self.searchButton, 'click', function() {
+			const value = self.searchInput.value;
+			Controller.searchByTerm(value);
+		});
 		
-		this.addListener(this.searchButton, 'click', renderSearchResults);
+		self.addListener(self.nextButton, 'click', function() {
+			Controller.nextPage();
+		});
+
+		self.addListener(self.previousButton, 'click', function() {
+			Controller.previousPage();
+		});
+
+		self.searchSubToken = PubSub.subscribe(UPDATE_CURRENT_SEARCH_RESULTS, () => {
+			self.render();
+		});
+
 	},
 
-	renderSearchResults: function() {
-		const self = this;
-		Controller.searchByTerm(self.searchInput.value).then(gameDataResults => {
-			gameDataResults.forEach(gameData => {
-				const ResultView = new SearchResultView(gameData);
+	render: function() {
+		const self = this,
+			gameDataResults = Controller.getCurrentSearchResults();
+			debugger;
 
-				this.searchResults.append(ResultView.render());
-			});
+		while (this.searchResultsList.firstChild) {
+			this.searchResultsList.removeChild(
+				this.searchResultsList.firstChild
+			);
+		}
+
+		gameDataResults.forEach(gameData => {
+			const resultElement = (gameData);
+			self.searchResultsList.append(
+				self.renderResult(gameData)
+			);
 		});
 	},
-};
 
-extendPrototype(SearchView, BaseView);
-
-const SearchResultView = function(gameData) {
-	this.gameData = gameData;
-};
-
-SearchResultView.prototype = {
-	render: function() {
+	renderResult: function(gameData) {
 		let imageUrl = '';
+		const cover = gameData.cover;
 		
-		if (
-			this.gameData.cover
-			&& this.gameData.cover.url
-		) {
-			imageUrl = this.gameData.cover.url;
-		}
+		if (cover && cover.url) { imageUrl = cover.url; }
 
 		const htmlString = `
 			<img width='90' height='90' src='${imageUrl}'>
-			<span>${this.gameData.name}</span>
+			<span>${gameData.name}</span>
 		`;
 
 		const element = document.createElement('div');
@@ -97,6 +115,15 @@ SearchResultView.prototype = {
 		return element;
 	},
 };
+
+extendPrototype(SearchView, BaseView);
+
+const SearchResultView = function(gameData) {
+	this.gameData = gameData;
+};
+
+
+extendPrototype(SearchResultView, BaseView);
 
 let Controller = {
 	init: function() {
@@ -126,6 +153,7 @@ let Controller = {
 			res => res.json()
 		).then(resultsData => {
 			Store.searchState.searchResults[pageNumber] = resultsData.body;
+			PubSub.publish(UPDATE_CURRENT_SEARCH_RESULTS);
 			return resultsData.body;
 		}).catch(err => {
 			console.log(err);
@@ -143,11 +171,12 @@ let Controller = {
 		
 		// Check if data has been cached for the current pagination level
 		// of the current search term 
-		const cachedData = Store.searchData.searchResults[
-			Store.searchData.currentPage
+		const cachedData = Store.searchState.searchResults[
+			Store.searchState.currentPage
 		];
 
-		if (Array.isArray(cacheData)) {
+		if (Array.isArray(cachedData)) {
+			Controller.publishUpdate();
 			return Promise.resolve(cachedData);
 		}
 
@@ -171,11 +200,12 @@ let Controller = {
 
 		// Check if data has been cached for the current pagination level
 		// of the current search term 
-		const cachedData = Store.searchData.searchResults[
-			Store.searchData.currentPage
+		const cachedData = Store.searchState.searchResults[
+			Store.searchState.currentPage
 		];
 
-		if (Array.isArray(cacheData)) {
+		if (Array.isArray(cachedData)) {
+			Controller.publishUpdate();
 			return Promise.resolve(cachedData);
 		}
 
@@ -184,11 +214,26 @@ let Controller = {
 			Store.searchState.currentPage
 		);
 	},
+
+	getCurrentSearchResults: function() {
+		let results = [];
+		const { currentSearchTerm, currentPage, searchResults } = Store.searchState;
+		
+		if (currentSearchTerm && currentPage) {
+			results = searchResults[currentPage];
+		}
+
+		return results;
+	},
+
+	publishUpdate: function() {
+		PubSub.publish(UPDATE_CURRENT_SEARCH_RESULTS);
+	},
 };
 
 
 // State Store for the application
-let Store = {
+const Store = {
 	searchState: {
 		currentSearchTerm: undefined,
 		currentPage: undefined,
