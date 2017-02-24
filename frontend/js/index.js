@@ -1,7 +1,7 @@
 // Apply fetch API to the global space
 require('es6-promise').polyfill();
 require('isomorphic-fetch');
-const SearchView = require('./view.search');
+const Router = require('./router');
 
 // Setup page
-new SearchView().render();
+new Router();
