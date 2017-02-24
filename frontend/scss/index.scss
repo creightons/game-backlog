@@ -53,7 +53,9 @@ $section-spacing: 20px;
 .search-controls {
 	display: flex;
 	justify-content: space-between;
+	margin-bottom: $section-spacing;
 }
+
 .button {
 	padding: 20px;
 	width: 130px;
@@ -61,4 +63,9 @@ $section-spacing: 20px;
 	color: white;
 	background-color: green;
 	cursor: pointer;
+}
+
+.button-disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
 }
