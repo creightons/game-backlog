@@ -1,7 +1,10 @@
 const Promise = require('bluebird'),
 	PubSub = require('pubsub-js'),
 	Store = require('./store'),
-	{ UPDATE_CURRENT_SEARCH_RESULTS } = require('./channel-topics');
+	{
+		UPDATE_CURRENT_SEARCH_RESULTS,
+		DISPLAY_VIEW,
+	} = require('./channel-topics');
 
 
 const SEARCH_RESULT_PAGE_MAX_ENTRIES = 15; // Can have up to 15 entries on a page
@@ -138,7 +141,11 @@ const Controller = {
 		const { currentPage } = Store.searchState;
 		if (currentPage && currentPage > 1) { return true; }
 		return false;
-	}
+	},
+
+	publishRoute: function(viewName) {
+		PubSub.publish(DISPLAY_VIEW, viewName);
+	},
 };
 
 module.exports = Controller;

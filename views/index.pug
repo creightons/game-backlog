@@ -9,12 +9,23 @@ html
 			h1.navbar-header Game Backlogs
 				div.sign-in-link Sign In
 		main
-			div.search-component
+			div.search-view
+				div.search-component
+					div
+						input.search-input(type='text' name='value')
+						button.search-button Search
+					div.search-results
+					div.search-controls
+						div.button.previous Previous
+						div.button.next Next
+			div.login-view.display-none
+				h2 Sign In
 				div
-					input.search-input(type='text' name='value')
-					button.search-button Search
-				div.search-results
-				div.search-controls
-					div.button.previous Previous
-					div.button.next Next
+					label Username
+					input.username(type='text')
+					br
+					label Password
+					input(type='password')
+					br
+					button.login-button Login
 		script(src='build.js')
