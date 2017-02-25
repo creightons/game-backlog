@@ -5,7 +5,10 @@
   "main": "server.js",
   "scripts": {
     "build-js": "browserify  -t [ babelify --presets [ es2015 ] ] frontend/js/index > public/build.js",
-    "watch-js": "watchify  -dv -t [ babelify --presets [ es2015 ] ] frontend/js/index -o public/build.js"
+    "watch-js": "watchify  -dv -t [ babelify --presets [ es2015 ] ] frontend/js/index -o public/build.js",
+    "build-css": "node-sass frontend/scss/index.scss public/index.css",
+    "watch-css": "npm run build-css && npm run build-css -- -w",
+    "watch": "concurrently \"npm run watch-css\" \"npm run watch-js\" "
   },
   "dependencies": {
     "babel-preset-es2015": "^6.22.0",
@@ -13,6 +16,7 @@
     "bluebird": "^3.4.7",
     "body-parser": "^1.16.1",
     "browserify": "^14.1.0",
+    "concurrently": "^3.3.0",
     "cookie-parser": "^1.4.3",
     "es6-promise": "^4.0.5",
     "express": "^4.14.1",
