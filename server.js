@@ -38,8 +38,6 @@ app.use(passport.session());
 app.use((req, res, next) => {
 	const fullURL = req.method + ' ' + req.url;
 	console.log(fullURL);
-	console.log('body = ', req.body);
-	debugger;
 	next();
 });
 

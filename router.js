@@ -7,7 +7,7 @@ module.exports = function(app) {
 
 	// Render page
 	app.get('/', (req, res, next) => {
-		res.status(200).render('index');
+		res.status(200).render('index-react');
 	});
 
 	// Login route; sends a 401 status if authentication failed
