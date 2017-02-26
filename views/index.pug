@@ -7,8 +7,9 @@ html
 	body
 		nav.navbar
 			h1.navbar-header Game Backlogs
-				div.sign-in-link Sign In
-		main
+				a(href='#sign-in')
+					div.sign-in-link Sign In
+		main.main-content
 			div.search-view
 				div.search-component
 					div
@@ -28,4 +29,8 @@ html
 					input(type='password')
 					br
 					button.login-button Login
+
+				a(href='#search') Back to search
+			div.profile-view.display-none
+				This is where your favorited games are listed
 		script(src='build.js')

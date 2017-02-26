@@ -8,13 +8,7 @@ const NavbarView = function() {
 };
 
 NavbarView.prototype = {
-	init: function() {
-		this.signInButton = document.querySelector('.sign-in-link');
-
-		this.addListener(this.signInButton, 'click', function() {
-			Controller.publishRoute('LOGIN_VIEW');
-		});
-	},
+	init: function() {},
 };
 
 extendPrototype(NavbarView, BaseView);

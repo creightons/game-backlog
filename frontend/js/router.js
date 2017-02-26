@@ -1,7 +1,10 @@
 const SearchView = require('./view.search'),
 	NavbarView = require('./view.navbar'),
+	SigninView = require('./view.signin'),
 	PubSub = require('pubsub-js'),
-	{ DISPLAY_VIEW } = require('./channel-topics');
+	constants = require('./constants'),
+	{ DISPLAY_VIEW } = constants.channelTopics,
+	{ SEARCH_VIEW, SIGNIN_VIEW } = constants.viewNames;
 
 const Router = function() {
 	this.init();
@@ -9,21 +12,30 @@ const Router = function() {
 
 Router.prototype = {
 	init: function() {
+		// Initialize the priamry views for different pages
 		new SearchView().render();
 		new NavbarView();
+		new SigninView();
 
-		this.viewRoots = {
-			LOGIN_VIEW: document.querySelector('.login-view'),
+		// Setup hash fragment to view name mapping
+		this.hashToViewMap = {
+			'#search': SEARCH_VIEW,
+			'#sign-in': SIGNIN_VIEW,
 		};
 
+		// Set the initial page hash fragment
+		location.hash = 'search';
+
+		// Add listener for route changes
 		const self = this;
-		self.routeSubToken = PubSub.subscribe(DISPLAY_VIEW, (topic, viewName) => {
-			self.displayView(viewName);
+		window.addEventListener('hashchange', function() {
+			self.publishViewChange();
 		});
 	},
 
-	displayView: function(viewName) {
-		this.viewRoots[viewName].classList.remove('display-none');
+	publishViewChange: function() {
+		const view = this.hashToViewMap[ location.hash ];
+		PubSub.publish(DISPLAY_VIEW, view);
 	},
 };
 

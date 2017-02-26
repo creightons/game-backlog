@@ -1,15 +1,18 @@
 const BaseView = require('./view.base'),
 	PubSub = require('pubsub-js'),
-	{ UPDATE_CURRENT_SEARCH_RESULTS } = require('./channel-topics'),
+	constants = require('./constants'),
 	{ extendPrototype } = require('./utils'),
-	Controller = require('./controller');
+	Controller = require('./controller'),
+	{ UPDATE_CURRENT_SEARCH_RESULTS, DISPLAY_VIEW } = constants.channelTopics,
+	{ SEARCH_VIEW } = constants.viewNames;
 
 const SearchView = function() {
 	this.init();
 };
 
 SearchView.prototype = {
-	init: function() {		
+	init: function() {	
+		this.root = document.querySelector('.search-view');	
 		this.searchInput = document.querySelector('.search-input');
 		this.searchButton = document.querySelector('.search-button');
 		this.searchResultsList = document.querySelector('.search-results');
@@ -33,6 +36,19 @@ SearchView.prototype = {
 		self.searchSubToken = PubSub.subscribe(UPDATE_CURRENT_SEARCH_RESULTS, () => {
 			self.render();
 		});
+
+		self.displayViewToken = PubSub.subscribe(DISPLAY_VIEW, (topic, viewName) => {
+			self.controlVisibility(viewName);
+		});
+	},
+
+	controlVisibility: function(viewName) {
+		if (viewName === SEARCH_VIEW) {
+			this.root.classList.remove('display-none');
+		}
+		else {
+			this.root.classList.add('display-none');
+		}
 	},
 
 	render: function() {
