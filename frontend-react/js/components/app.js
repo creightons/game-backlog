@@ -1,8 +1,14 @@
-const React = require('react');
+const React = require('react'),
+	Navbar = require('./navbar');
 
-const App = () => {
+const App = (props) => {
 	return (
-		<div>This is the app</div>
+		<div>
+			<Navbar />
+			<main>
+				{props.children}
+			</main>
+		</div>
 	);
 };
 

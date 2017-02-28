@@ -2,7 +2,7 @@ const merge = require('lodash.merge');
 
 const actions = merge(
 	{},
-	require('./search-results'),
+	require('./igdb-search')
 );
 
 module.exports = actions;

@@ -4,12 +4,15 @@ const {
 		browserHistory,
 	} = require('react-router'),
 	React = require('react'),
-	App = require('./app');
+	App = require('./app'),
+	SearchView = require('../containers/search-view');
 
 const SiteRouter = () => {
 	return (
 		<Router history={browserHistory}>
-			<Route path='/' component={App} />
+			<Route component={App}>
+				<Route path='/' component={SearchView} />
+			</Route>
 		</Router>
 	);
 };
