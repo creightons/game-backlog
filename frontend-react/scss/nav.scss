@@ -1,0 +1,24 @@
+@import 'constants';
+
+.navbar-header {
+	background-color: $niagra;
+	height: $navbar-height;
+	position: relative;
+}
+
+.navbar-title {
+	color: $white;
+	font-size: $text-size-1;
+	text-align: center;
+	line-height: $navbar-height;
+}
+
+.sign-in-link {
+	position: absolute;
+	color: $white;
+	font-size: $text-size-3;
+	top: ( $navbar-height / 2 );
+	right: 20px;
+	cursor: pointer;
+	transform: translateY(-50%);
+}

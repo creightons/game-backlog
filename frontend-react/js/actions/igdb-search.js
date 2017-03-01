@@ -10,7 +10,7 @@ const INITIAL_PAGE_NUMBER = 1;
 
 function searchIGDB(searchTerm, pageNumber) {
 	return (dispatch) => {
-		const url = `/igdb/${searchTerm}/{pageNumber}`;
+		const url = `/igdb/${searchTerm}/${pageNumber}`;
 		fetch(url).then(
 			res => res.json()
 		).then(results => {
