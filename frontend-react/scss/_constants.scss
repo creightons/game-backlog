@@ -8,5 +8,19 @@ $text-size-2: 36px;
 $text-size-3: 22px;
 $text-size-4: 16px;
 
+// Spacing Constants
+$space-between-rows: 20px;
+
+
 // Layout Size Constants
 $navbar-height: 90px;
+$search-bar-height: 30px;
+$search-bar-button-width: 120px;
+$search-view-button-width: 100px;
+$search-view-button-height: 50px;
+
+// Mixins
+
+@mixin standard-bottom-margin() {
+	margin-bottom: $space-between-rows;
+}

@@ -29,26 +29,24 @@ class SearchView extends React.Component {
 	render() {
 		return (
 			<div className='search-view'>
-				<div className='search-component'>
-					<div>
-						<input
-							className='search-input'
-							type='text'
-							name='value'
-							onChange={this.handleChange}
-						/>
-						<button
-							className='search-button'
-							onClick={this.handleSearchClick}
-						>
-							Search
-						</button>
-					</div>
+				<div className='search-bar-box'>
+					<input
+						className='search-input'
+						type='text'
+						name='value'
+						onChange={this.handleChange}
+					/>
+					<label
+						className='search-bar-button'
+						onClick={this.handleSearchClick}
+					>
+						Search
+					</label>
 				</div>
 				<div className='search-results' />
 				<div className='search-controls'>
-					<div className='button button-disabled previous'>Previous</div>
-					<div className='button button-disabled next'>Next</div>
+					<div className='search-button search-button-disabled previous'>Previous</div>
+					<div className='search-button search-button-disabled next'>Next</div>
 				</div>								
 			</div>	
 		);

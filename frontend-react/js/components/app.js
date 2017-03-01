@@ -5,7 +5,7 @@ const App = (props) => {
 	return (
 		<div>
 			<Navbar />
-			<main>
+			<main className='main-content'>
 				{props.children}
 			</main>
 		</div>

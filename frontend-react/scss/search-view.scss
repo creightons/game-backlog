@@ -1,0 +1,55 @@
+@import 'constants';
+
+.search-bar-box {
+	display: flex;
+}
+
+.search-input {
+	height: $search-bar-height;
+	line-height: $search-bar-height;
+	padding-left: 10px;
+	color: $niagra;
+	border: 1px solid $niagra;
+	flex: 1;
+
+	@include standard-bottom-margin();
+
+	&:focus {
+		outline: none;
+	}
+}
+
+.search-bar-button {
+	width: $search-bar-button-width;
+	display: block;
+	height: $search-bar-height;
+	line-height: $search-bar-height;
+	background-color: $niagra;
+	color: $white;
+	text-align: center;
+	cursor: pointer;
+}
+
+.search-results {
+	@include standard-bottom-margin();
+}
+
+.search-controls {
+	display: flex;
+	justify-content: space-between;
+}
+
+.search-button {
+	height: $search-view-button-height;
+	width: $search-view-button-width;
+	color: $white;
+	background-color: $niagra;
+	line-height: $search-view-button-height;
+	text-align: center;
+	cursor: pointer;
+}
+
+.search-button-disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+}
