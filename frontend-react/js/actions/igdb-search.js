@@ -1,9 +1,13 @@
 const {
-	SEARCH_IGDB,
-	IGDB_SEARCH_SUCCESS,
-	IGDB_SEARCH_FAILURE,
-	UPDATE_CURRENT_SEARCH_SETTINGS,
-} = require('../action-types');
+		SEARCH_IGDB,
+		IGDB_SEARCH_SUCCESS,
+		IGDB_SEARCH_FAILURE,
+		UPDATE_CURRENT_SEARCH_SETTINGS,
+	} = require('../action-types'),
+	{
+		handleError,
+		handleFetchError,
+	} = require('../utils');
 
 
 const INITIAL_PAGE_NUMBER = 1;
@@ -12,11 +16,14 @@ function searchIGDB(searchTerm, pageNumber) {
 	return (dispatch) => {
 		const url = `/igdb/${searchTerm}/${pageNumber}`;
 		fetch(url).then(
+			handleError
+		).then(
 			res => res.json()
 		).then(results => {
 			return dispatch(searchIGDBSuccess(results.body, pageNumber, searchTerm));
 		}).catch(err => {
-			return dispatch(searchIGDBFailure(err));
+			dispatch(searchIGDBFailure(err));
+			handleError(err);
 		});
 	};
 }
