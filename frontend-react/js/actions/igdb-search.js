@@ -16,7 +16,7 @@ function searchIGDB(searchTerm, pageNumber) {
 	return (dispatch) => {
 		const url = `/igdb/${searchTerm}/${pageNumber}`;
 		fetch(url).then(
-			handleError
+			handleFetchError
 		).then(
 			res => res.json()
 		).then(results => {
@@ -59,16 +59,16 @@ function updateCurrentSearchSettings(searchTerm, pageNumber) {
 
 function searchThroughPagination(searchTerm, currentPage) {
 	return (dispatch, getState) => {
-		const { searchResults } = getState();
+		const { searchResults, currentSearchTerm } = getState().searchResults;
 		const pageNumbers = Object.keys(
-			searchResults[searchTerm]
+			searchResults[currentSearchTerm]
 		)
 		.map(val => parseInt(val))
 		.sort();
 
-		maxPage = pageNumbers[pageNumbers.length];
+		const maxPage = pageNumbers[pageNumbers.length];
 
-		if (currrentPage <= maxPage) {
+		if (currentPage <= maxPage) {
 			return dispatch(
 				updateCurrentSearchSettings(searchTerm, currentPage)
 			);

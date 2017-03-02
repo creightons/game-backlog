@@ -8,10 +8,6 @@ const React = require('react'),
 	{ Provider } = require('react-redux'),
 	Router = require('./components/router');
 
-const Component = () => { return ( <div>Hi</div> ); };
-
-const Wrapper = () => { return (<Component />); };
-
 render(
 	<Provider store={store}>
 		<Router />
