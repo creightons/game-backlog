@@ -54,11 +54,11 @@ class SearchView extends React.Component {
 }
 
 function getCurrentResults(state) {
-	const { currentSearchTerm, currentPage, searchResults } = state.searchResults;
+	const { searchTerm, currentPage, searchResults } = state.searchResults;
 	if (
 		searchResults
-		&& searchResults[currentSearchTerm]
-		&& searchResutls[currentSearchTerm][currentPage]
+		&& searchResults[searchTerm]
+		&& searchResutls[searchTerm][currentPage]
 	) {
 		return searchResults[currentSearchTerm][currentPage];
 	}

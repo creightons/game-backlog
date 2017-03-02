@@ -14,9 +14,9 @@ function searchIGDB(searchTerm, pageNumber) {
 		fetch(url).then(
 			res => res.json()
 		).then(results => {
-			dispatch(searchIGDBSuccess(results, pageNumber));
+			return dispatch(searchIGDBSuccess(results.body, pageNumber, searchTerm));
 		}).catch(err => {
-			dispatch(searchIGDBFailure(err));
+			return dispatch(searchIGDBFailure(err));
 		});
 	};
 }
@@ -27,7 +27,7 @@ function startIGDBSearch() {
 	};
 }
 
-function searchIGDBSuccess(searchResults, searchTerm) {
+function searchIGDBSuccess(searchResults, currentPage, searchTerm) {
 	return {
 		type: IGDB_SEARCH_SUCCESS,
 		searchTerm,

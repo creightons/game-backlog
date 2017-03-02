@@ -24,13 +24,14 @@ function reducer(state=initialState, action) {
 
 		case IGDB_SEARCH_SUCCESS:
 			const { searchTerm, currentPage, searchResults } = action;
-			let newSearchResults = {};
+			const newSearchResults = {};
+			newSearchResults[searchTerm] = {};
 			newSearchResults[searchTerm][currentPage] = searchResults;
 			
 			return merge({}, state, {
 				searchResults: newSearchResults,
 				loading: false,
-				currentPage: currentPage,
+				currentPage,
 				currentSearchTerm: searchTerm,
 			});
 
