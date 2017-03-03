@@ -17,7 +17,7 @@ module.exports = function(app) {
 
 	function isAuthenticated(req, res, next) {
 		if (req.isAuthenticated()) { return next() };
-		return res.status(500).send();
+		return res.status(401).send();
 	}
 
 	app.use('/user', userRoutes);
