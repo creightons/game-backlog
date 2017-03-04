@@ -15,6 +15,11 @@ module.exports = function(app) {
 		res.send(req.user.id);
 	});
 
+	app.get('/logout', (req, res) {
+		req.logout();
+		res.status(200).send();
+	});
+
 	function isAuthenticated(req, res, next) {
 		if (req.isAuthenticated()) { return next() };
 		return res.status(401).send();

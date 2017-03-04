@@ -5,6 +5,7 @@ const express = require('express'),
 	cookieParser = require('cookie-parser'),
 	session = require('express-session'),
 	passport = require('passport'),
+	mongoose = require('mongoose'),
 	config = require('./config');
 
 // Add API Key for 
@@ -40,6 +41,9 @@ app.use((req, res, next) => {
 	console.log(fullURL);
 	next();
 });
+
+ // Connect to database
+ mongoose.connect(config.DB_URL);
 
 // Apply all routes
 require('./router.js')(app);

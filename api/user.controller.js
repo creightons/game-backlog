@@ -1,4 +1,5 @@
-const User = require('./user.model');
+const User = require('./user.model'),
+	passport = require('passport');
 
 function badReq(res) { res.status(400).send(); }
 
@@ -19,6 +20,7 @@ function signUp(req, res, next) {
 			return res.status(200).send();
 		});			
 	}).catch(err => {
+		res.status(500).send();
 		next(err);
 	});
 }
