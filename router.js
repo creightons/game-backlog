@@ -15,7 +15,7 @@ module.exports = function(app) {
 		res.send(req.user.id);
 	});
 
-	app.get('/logout', (req, res) {
+	app.post('/logout', (req, res) => {
 		req.logout();
 		res.status(200).send();
 	});

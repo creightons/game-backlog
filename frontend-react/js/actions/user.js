@@ -2,12 +2,13 @@ const {
 		REQUEST_AUTHENTICATION,
 		REQUEST_AUTHENTICATION_SUCCESS,
 		REQUEST_AUTHENTICATION_FAILURE,
-		FORCE_LOG_OUT,
 		REQUEST_SIGNUP,
 		REQUEST_SIGNUP_SUCCESS,
 		REQUEST_SIGNUP_FAILURE,
 	} = require('../action-types'),
-	fetchUrl = require('../utils');
+	{ hashHistory } = require('react-router'),
+	{ fetchUrl, forceLogOut } = require('./authorized-fetch'),
+	{ handleError } = require('../utils');
 
 
 function requestAuthentication() {
@@ -29,27 +30,21 @@ function authenticationFailure() {
 	};
 }
 
-function forceLogOut() {
-	return {
-		type: FORCE_LOG_OUT,
-	};
-}
-
-function authenticateUser(username, password) {
+function login(username, password) {
 	return (dispatch) => {
-		dispatch(requestAuthentication);
+		dispatch( requestAuthentication() );
 
 		fetchUrl('/login', {
 			headers: {
-				'Content-Type': 'application-json',
+				'Content-Type': 'application/json',
 			},
 			method: 'POST',
 			body: JSON.stringify({ username, password}),
-		}).then(
-			res => res.json()
-		).then(() => {
+		}).then(() => {
 			dispatch( authenticationSuccess(username) );
+			hashHistory.push('/profile');
 		}).catch(err => {
+			handleError(err);
 			dispatch( authenticationFailure() );
 		});
 	};
@@ -76,26 +71,38 @@ function signupFailure() {
 
 function signup(username, password) {
 	return (dispatch) => {
-		dispatch(requestSignup());
+		dispatch( requestSignup() );
 
-		fetchUrl('/signup', {
+		fetchUrl('/user', {
 			headers: {
-				'Content-type': 'application-json',
+				'Content-Type': 'application/json',
 			},
 			method: 'POST',
 			body: JSON.stringify({ username, password }),
-		}).then(
-			res => res.json()
-		).then(() => {
+		}).then(() => {
 			dispatch( signupSuccess(username) );
+			hashHistory.push('/profile');
 		}).catch(err => {
+			handleError(err)
 			dispatch( signupFailure() );
+		});
+	};
+}
+
+function logout() {
+	return (dispatch) => {
+		dispatch(forceLogOut());
+		hashHistory.push('/');
+		fetchUrl('/logout', {
+			method: 'POST',
+		}).catch(err => {
+			handleError(err);
 		});
 	};
 }
 
 module.exports = {
 	signup,
-	authenticateUser,
-	forceLogOut,
+	login,
+	logout,
 };

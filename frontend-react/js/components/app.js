@@ -1,5 +1,5 @@
 const React = require('react'),
-	Navbar = require('./navbar');
+	Navbar = require('../containers/navbar');
 
 const App = (props) => {
 	return (

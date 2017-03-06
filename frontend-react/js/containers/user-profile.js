@@ -1,11 +1,37 @@
-const React = require('react');
+const React = require('react'),
+	{ logout } = require('../actions'),
+	{ connect } = require('react-redux');
 
-function UserProfile() {
+function UserProfile({ username, logoutUser }) {
+	function handleClick() {
+		logoutUser();
+	}
+
 	return (
 		<div>
-			This is your profile page.
+			<div>Hello, {username}.</div>
+			<button onClick={handleClick}>
+				Logout
+			</button>
 		</div>
 	);
 }
 
-module.exports = UserProfile;
+function mapStateToProps(state, props) {
+	return {
+		username: state.user.username,
+	};
+}
+
+function mapDispatchToProps(dispatch) {
+	return {
+		logoutUser: () => dispatch( logout() ),
+	};
+}
+
+const container = connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(UserProfile);
+
+module.exports = container;

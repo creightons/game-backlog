@@ -4,10 +4,8 @@ const {
 		IGDB_SEARCH_FAILURE,
 		UPDATE_CURRENT_SEARCH_SETTINGS,
 	} = require('../action-types'),
-	{
-		handleError,
-		handleFetchError,
-	} = require('../utils');
+	{ fetchUrl } = require('./authorized-fetch'),
+	{ handleError } = require('../utils');
 
 
 const INITIAL_PAGE_NUMBER = 1;
@@ -15,9 +13,7 @@ const INITIAL_PAGE_NUMBER = 1;
 function searchIGDB(searchTerm, pageNumber) {
 	return (dispatch) => {
 		const url = `/igdb/${searchTerm}/${pageNumber}`;
-		fetch(url).then(
-			handleFetchError
-		).then(
+		fetchUrl(url).then(
 			res => res.json()
 		).then(results => {
 			return dispatch(searchIGDBSuccess(results.body, pageNumber, searchTerm));

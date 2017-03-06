@@ -7,9 +7,12 @@
 }
 
 .navbar-title {
+	text-align: center;
+}
+
+.navbar-title-text {
 	color: $white;
 	font-size: $text-size-1;
-	text-align: center;
 	line-height: $navbar-height;
 }
 
