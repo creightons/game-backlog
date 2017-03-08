@@ -20,6 +20,9 @@ app.use(session({
 	secret: config.SESSION_SECRET,
 	resave: false,
 	saveUninitialized: false,
+	cookie: {
+		httpOnly: true,
+	},
 }));
 
 // Setup Parsers

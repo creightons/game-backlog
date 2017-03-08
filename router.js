@@ -1,4 +1,5 @@
 const passport = require('passport'),
+	accessRoutes = require('./api/access.routes'),
 	userRoutes = require('./api/user.routes'),
 	gameRoutes = require('./api/game.routes'),
 	igdbRoutes = require('./api/igdb.routes');
@@ -10,21 +11,13 @@ module.exports = function(app) {
 		res.status(200).render('index-react');
 	});
 
-	// Login route; sends a 401 status if authentication failed
-	app.post('/login', passport.authenticate('local'), (req, res) => {
-		res.send(req.user.id);
-	});
-
-	app.post('/logout', (req, res) => {
-		req.logout();
-		res.status(200).send();
-	});
 
 	function isAuthenticated(req, res, next) {
 		if (req.isAuthenticated()) { return next() };
 		return res.status(401).send();
 	}
 
+	app.use(accessRoutes);
 	app.use('/user', userRoutes);
 	app.use('/igdb', igdbRoutes);
 	app.use('/game', isAuthenticated, gameRoutes)

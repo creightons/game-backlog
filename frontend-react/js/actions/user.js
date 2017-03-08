@@ -35,6 +35,7 @@ function login(username, password) {
 		dispatch( requestAuthentication() );
 
 		fetchUrl('/login', {
+			credentials: 'same-origin',
 			headers: {
 				'Content-Type': 'application/json',
 			},
@@ -74,6 +75,7 @@ function signup(username, password) {
 		dispatch( requestSignup() );
 
 		fetchUrl('/user', {
+			credentials: 'same-origin',
 			headers: {
 				'Content-Type': 'application/json',
 			},
@@ -94,9 +96,28 @@ function logout() {
 		dispatch(forceLogOut());
 		hashHistory.push('/');
 		fetchUrl('/logout', {
+			credentials: 'same-origin',
 			method: 'POST',
 		}).catch(err => {
 			handleError(err);
+		});
+	};
+}
+
+function checkIfLoggedIn() {
+	return (dispatch) => {
+		fetchUrl('/user-is-logged-in', {
+			credentials: 'same-origin',
+		}).then(
+			res => res.json()
+		).then(loginStatus => {
+			if (loginStatus.loggedIn) {
+				dispatch(
+					authenticationSuccess(
+						loginStatus.username
+					)
+				);
+			}
 		});
 	};
 }
@@ -105,4 +126,5 @@ module.exports = {
 	signup,
 	login,
 	logout,
+	checkIfLoggedIn,
 };
