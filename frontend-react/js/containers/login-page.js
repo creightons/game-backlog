@@ -48,16 +48,43 @@ class LoginPage extends React.Component {
 
 		return (
 			<div>
+				<div className='login-component'>
+					<h3 className='login-title'>Enter</h3>
+					<div className='input-row'>
+						<label className='login-label'>Username</label>
+						<input
+							className='login-input'
+							type='text'
+							value={username}
+							onChange={this.changeUsername}
+						/>
+					</div>
+					<div className='input-row'>
+						<label className='login-label'>Password</label>
+						<input
+							className='login-input'
+							type='password'
+							value={password}
+							onChange={this.changePassword}
+						/>
+					</div>
+					<div className='login-button-row'>
+						<button
+							className='login-button'
+							onClick={this.handleSignup}
+						>
+							Sign Up
+						</button>
+						<button 
+							className='login-button'
+							onClick={this.handleLogin}
+						>
+							Login
+						</button>
+					</div>
+				</div>
 				{ loading ? <div>Loading</div> : <div /> }
 				{ error ? <div>An error occurred</div> : <div /> }
-				<label>Username</label>
-				<input type='text' value={username} onChange={this.changeUsername} />
-				<br />
-				<label>Password</label>
-				<input type='password' value={password} onChange={this.changePassword} />
-				<br />
-				<button onClick={this.handleSignup}>Sign Up</button>
-				<button onClick={this.handleLogin}>Login</button>
 			</div>
 		);
 	}

@@ -1,0 +1,55 @@
+@import 'constants';
+
+$bottom-space: 25px;
+.login-component {
+	width: 400px;
+	border: 1px solid $niagra;
+	margin: 0 auto;
+}
+
+.login-title {
+	text-align: center;
+	font-size: $text-size-2;
+	color: $white;
+	background-color: $niagra;
+	padding: 15px 0;
+	margin-bottom: $bottom-space;
+
+}
+
+.input-row {
+	display: flex;
+}
+
+.login-label {
+	flex: 1;
+	padding-left: 10px;
+	margin-bottom: $bottom-space;
+	color: $niagra;
+	font-weight: bold;
+}
+
+.login-input {
+	flex: 3;
+	margin-right: 10px;
+	margin-bottom: $bottom-space;
+	border: 1px solid $niagra;
+	color: $niagra;
+	background-color: $white;
+}
+
+.login-button-row {
+	display: flex;
+	justify-content: space-around;
+}
+
+.login-button {
+	margin-bottom: $bottom-space;
+	width: 20%;
+	padding: 15px 0;
+	border: none;
+	background-color: $niagra;
+	color: $white;
+	font-size: $text-size-4;
+	cursor: pointer;
+}
