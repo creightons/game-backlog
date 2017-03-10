@@ -1,20 +1,33 @@
 const React = require('react'),
-	{ logout } = require('../actions'),
+	{ logout, getGamesBacklog } = require('../actions'),
 	{ connect } = require('react-redux');
 
-function UserProfile({ username, logoutUser }) {
-	function handleClick() {
-		logoutUser();
-	}
+class UserProfile extends React.Component {
+	constructor(props) {
+		super(props);
 
-	return (
-		<div>
-			<div>Hello, {username}.</div>
-			<button onClick={handleClick}>
-				Logout
-			</button>
-		</div>
-	);
+		this.handleClick = this.handleClick.bind(this);
+	}
+	
+	handleClick() {
+		this.props.logoutUser();
+	}
+	
+	componentDidMount() {
+		this.props.getGamesBacklog();
+	}
+	
+	render() {
+
+		return (
+			<div>
+				<div>Hello, {this.props.username}.</div>
+				<button onClick={this.handleClick}>
+					Logout
+				</button>
+			</div>
+		);
+	}
 }
 
 function mapStateToProps(state, props) {
@@ -26,6 +39,7 @@ function mapStateToProps(state, props) {
 function mapDispatchToProps(dispatch) {
 	return {
 		logoutUser: () => dispatch( logout() ),
+		getGamesBacklog: () => dispatch( getGamesBacklog() ),
 	};
 }
 
