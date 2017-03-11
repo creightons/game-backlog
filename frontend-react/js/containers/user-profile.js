@@ -1,5 +1,5 @@
 const React = require('react'),
-	{ logout, getGamesBacklog } = require('../actions'),
+	{ logoutsss } = require('../actions'),
 	{ connect } = require('react-redux');
 
 class UserProfile extends React.Component {
@@ -12,11 +12,7 @@ class UserProfile extends React.Component {
 	handleClick() {
 		this.props.logoutUser();
 	}
-	
-	componentDidMount() {
-		this.props.getGamesBacklog();
-	}
-	
+
 	render() {
 
 		return (
@@ -39,7 +35,6 @@ function mapStateToProps(state, props) {
 function mapDispatchToProps(dispatch) {
 	return {
 		logoutUser: () => dispatch( logout() ),
-		getGamesBacklog: () => dispatch( getGamesBacklog() ),
 	};
 }
 

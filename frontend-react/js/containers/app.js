@@ -1,12 +1,24 @@
 const React = require('react'),
 	{ connect } = require('react-redux'),
-	{ checkIfLoggedIn } = require('../actions'),
+	{
+		checkIfLoggedIn,
+		getGamesBacklog,
+	} = require('../actions'),
 	Navbar = require('./navbar');
 
 class App extends React.Component {
 
 	componentWillMount() {
 		this.props.checkIfLoggedIn();
+	}
+
+	componentWillReceiveProps(nextProps) {
+		if (
+			nextProps.loggedIn === true
+			&& this.props.loggedIn === false
+		) {
+			this.props.getGamesBacklog();
+		}
 	}
 
 	render() {
@@ -22,12 +34,15 @@ class App extends React.Component {
 }
 
 function mapStateToProps(state, props) {
-	return {};
+	return {
+		loggedIn: state.user.loggedIn,
+	};
 }
 
 function mapDispatchToProps(dispatch) {
 	return {
 		checkIfLoggedIn: () => dispatch( checkIfLoggedIn() ),
+		getGamesBacklog: () => dispatch( getGamesBacklog() ),
 	};
 }
 

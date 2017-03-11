@@ -3,125 +3,9 @@ const React = require('react'),
 	{
 		searchNewTerm,
 		searchThroughPagination,
-	} = require('../actions');
-
-class SearchView extends React.Component {
-	constructor(props) {
-		super(props);
-
-		const searchTerm = this.props.currentSearchTerm;
-
-		this.state = { searchTerm };
-		this.handleChange = this.handleChange.bind(this);
-		this.handleSearchClick = this.handleSearchClick.bind(this);
-		this.handleNextClick = this.handleNextClick.bind(this);
-		this.handlePreviousClick = this.handlePreviousClick.bind(this);
-	}
-
-	handleChange(e) {
-		this.setState({
-			searchTerm: e.target.value,
-		});
-	}
-
-	handleSearchClick() {
-		this.props.searchForTerm(this.state.searchTerm);
-	}
-
-	handleNextClick() {
-		const {
-			currentPage,
-			currentSearchTerm,
-			isNextEnabled,
-			getPagedResults,
-		} = this.props;
-
-		if (isNextEnabled) {
-			getPagedResults(
-				currentSearchTerm,
-				currentPage + 1
-			);
-		}
-	}
-
-	handlePreviousClick() {
-		const {
-			currentPage,
-			currentSearchTerm,
-			isNextEnabled,
-			getPagedResults,
-		} = this.props;
-
-		if (isPreviousEnabled) {
-			getPagedResults(
-				currentSearchTerm,
-				currentPage - 1
-			);
-		}
-	}
-
-	render() {
-		const {
-			currentResults,
-			isNextEnabled,
-			isPreviousEnabled,
-		} = this.props;
-
-		let resultsList,
-			nextClasses = ['search-button', 'next'],
-			previousClasses = ['search-button', 'previous'];
-
-		if (!isNextEnabled) { nextClasses.push('search-button-disabled'); }
-		if (!isPreviousEnabled) { previousClasses.push('search-button-disabled'); }
-		
-		if (currentResults.length > 0) {
-			resultsList = (
-				<div className='search-results'>
-					{currentResults.map(result => {
-						return (
-							<div key={result.id}>
-								<img
-									width='90'
-									height='90'
-									src={result.cover && result.cover.url}
-								/>
-								<span>{result.name}</span>
-							</div>
-						);
-					})}
-				</div>
-			);
-		}
-		
-		return (
-			<div className='search-view'>
-				<div className='search-bar-box'>
-					<input
-						className='search-input'
-						type='text'
-						name='value'
-						onChange={this.handleChange}
-					/>
-					<label
-						className='search-bar-button'
-						onClick={this.handleSearchClick}
-					>
-						Search
-					</label>
-				</div>
-				{resultsList}
-				<div className='search-controls'>
-					<div onClick={this.handlePreviousClick} className={previousClasses.join(' ')}>
-						Previous
-					</div>
-					<div onClick={this.handleNextClick} className={nextClasses.join(' ')}>
-						Next
-					</div>
-				</div>								
-			</div>	
-		);
-	}
-}
+		addGameToBacklog,
+	} = require('../actions'),
+	SearchView = require('../components/search-component');
 
 
 function getCurrentResults(state) {
@@ -188,6 +72,7 @@ function mapStateToProps(state, props) {
 		currentResults: getCurrentResults(state),
 		isNextEnabled: isNextEnabled(state),
 		isPreviousEnabled: isPreviousEnabled(state),
+		isUserLoggedIn: state.user.loggedIn,
 	};
 }
 
@@ -199,12 +84,69 @@ function mapDispatchToProps(dispatch) {
 		searchForTerm: (searchTerm) => {
 			return dispatch( searchNewTerm(searchTerm) );
 		},
+		addGame: (gameSearchResult) => {
+			return dispatch( addGameToBacklog(gameSearchResult) );
+		},
+	};
+}
+
+function mergeProps(stateProps, dispatchProps, ownProps) {
+	const {
+			currentSearchTerm,
+			currentPage,
+			currentResults,
+			isNextEnabled,
+			isPreviousEnabled,
+			isUserLoggedIn,
+		} = stateProps,	
+		{
+			getPagedResults,
+			searchForTerm,
+			addGame,
+		} = dispatchProps;
+
+	let nextButtonHandler;
+
+	if (isNextEnabled) {
+		nextButtonHandler = () => {
+			getPagedResults( currentSearchTerm, currentPage + 1 );
+		};
+	}
+	else {
+		nextButtonHandler = () => {};
+	}
+
+	let previousButtonHandler;
+
+	if (isPreviousEnabled) {
+		previousButtonHandler = () => {
+			getPagedResults(
+				currentSearchTerm,
+				currentPage - 1
+			);
+		};
+	}
+	else {
+		previousButtonHandler = () => {};
+	}
+
+	return {
+		isNextEnabled,
+		isPreviousEnabled,
+		isUserLoggedIn,
+		nextButtonHandler,
+		previousButtonHandler,
+		currentSearchTerm,
+		currentResults,
+		searchForTerm,
+		addGame,
 	};
 }
 
 const container = connect(
 	mapStateToProps,
-	mapDispatchToProps
+	mapDispatchToProps,
+	mergeProps
 )(SearchView);
 
 module.exports = container;
