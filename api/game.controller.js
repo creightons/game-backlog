@@ -3,7 +3,8 @@ const Game = require('./game.model');
 // GET - returns all games for user
 function getGames(req, res, next) {
 	const userId = req.user._id;
-	Game.find({ owner: userId }).then(games => {
+
+	Game.find({ _owner: userId }).then(games => {
 		res.status(200).send(games);
 	}).catch(err => {
 		next(err);

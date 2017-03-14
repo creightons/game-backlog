@@ -13,7 +13,7 @@ router.post('/logout', (req, res) => {
 
 router.get('/user-is-logged-in', (req, res) => {
 	let responseArgs;
-	debugger;
+
 	if (req.isAuthenticated()) {
 		responseArgs = {
 			loggedIn: true,
