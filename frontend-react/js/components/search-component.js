@@ -1,4 +1,5 @@
-const React = require('react');
+const React = require('react'),
+	GameImage = require('./game-image');
 
 class SearchComponent extends React.Component {
 	constructor(props) {
@@ -110,11 +111,7 @@ function SearchResultItem({
 
 	return (
 		<div>
-			<img
-				width='90'
-				height='90'
-				src={searchResult.cover && searchResult.cover.url}
-			/>
+			<GameImage url={searchResult.cover && searchResult.cover.url} />
 			<span>{searchResult.name}</span>
 			{addButton}
 		</div>

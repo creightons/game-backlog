@@ -1,5 +1,6 @@
 const React = require('react'),
-	{ logoutsss } = require('../actions'),
+	{ logout } = require('../actions'),
+	BacklogList = require('../components/backlog-list'),
 	{ connect } = require('react-redux');
 
 class UserProfile extends React.Component {
@@ -17,10 +18,10 @@ class UserProfile extends React.Component {
 
 		return (
 			<div>
-				<div>Hello, {this.props.username}.</div>
-				<button onClick={this.handleClick}>
+				<button className='button' onClick={this.handleClick}>
 					Logout
 				</button>
+				<BacklogList games={this.props.games} />
 			</div>
 		);
 	}
@@ -29,6 +30,7 @@ class UserProfile extends React.Component {
 function mapStateToProps(state, props) {
 	return {
 		username: state.user.username,
+		games: state.games.games,
 	};
 }
 

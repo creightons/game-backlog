@@ -1,0 +1,9 @@
+@import 'constants';
+.button {
+	background-color: $niagra;
+	color: $white;
+	font-size: $text-size-4;
+	padding: 10px;
+	border: none;
+	cursor: pointer;
+}
