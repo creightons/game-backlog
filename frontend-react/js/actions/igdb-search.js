@@ -18,7 +18,7 @@ function searchIGDB(searchTerm, pageNumber) {
 		}).then(
 			res => res.json()
 		).then(results => {
-			return dispatch(searchIGDBSuccess(results.body, pageNumber, searchTerm));
+			return dispatch(searchIGDBSuccess(results, pageNumber, searchTerm));
 		}).catch(err => {
 			dispatch(searchIGDBFailure(err));
 			handleError(err);

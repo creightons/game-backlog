@@ -2,9 +2,14 @@ const {
 		REQUEST_GAMES,
 		REQUEST_GAMES_SUCCESS,
 		REQUEST_GAMES_FAILURE,
+		
 		REQUEST_ADD_GAME,
 		ADD_GAME_SUCCESS,
 		ADD_GAME_FAILURE,
+
+		REQUEST_REMOVE_GAME,
+		REMOVE_GAME_SUCCESS,
+		REMOVE_GAME_FAILURE,
 	} = require('../action-types'),
 	{ fetchUrl } = require('./authorized-fetch'),
 	{ handleError } = require('../utils');
@@ -77,8 +82,9 @@ function addGameToBacklog(game) {
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify(game),
-		}).then(() => {
-			dispatch( addGameSuccess(game) );
+		}).then( res => res.json() )
+		.then((newGameData) => {
+			dispatch( addGameSuccess(newGameData) );
 		}).catch(err => {
 			handleError(err);
 			dispatch( addGameFailure() );
@@ -86,7 +92,45 @@ function addGameToBacklog(game) {
 	};
 }
 
+function requestRemoveGame() {
+	return {
+		type: REQUEST_REMOVE_GAME,
+	};
+}
+
+function removeGameSuccess(game) {
+	return {
+		type: REMOVE_GAME_SUCCESS,
+		game,
+	};
+}
+
+function removeGameFailure() {
+	return {
+		type: REMOVE_GAME_FAILURE,
+	};
+}
+
+function removeGameFromBacklog(game) {
+	return dispatch => {
+		dispatch( requestRemoveGame() );
+
+		const url = `/game/${game._id}`;
+
+		fetchUrl(url, {
+			method: 'DELETE',
+			credentials: 'same-origin',
+		}).then(() => {
+			dispatch( removeGameSuccess(game) );
+		}).catch(err => {
+			handleError(err);
+			dispatch( removeGameFailure() );
+		});
+	};
+}
+
 module.exports = {
 	getGamesBacklog,
 	addGameToBacklog,
+	removeGameFromBacklog,
 };

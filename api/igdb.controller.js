@@ -12,7 +12,17 @@ function search(req, res, next) {
 		offset: offsetNumber,
 		fields: 'name,slug,cover',
 	}).then(results => {
-		res.status(200).send(results);
+		// Results = { url, body, head } - body has games, head has http headers
+
+		const games = results.body;
+
+		// convert all ids to igdbIds for the game models
+		games.forEach(game => {
+			game.igdbId = game.id;
+			delete game.id;
+		});
+
+		res.status(200).send(games);
 	}).catch(err => {
 		next(err);
 	});

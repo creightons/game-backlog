@@ -32,7 +32,7 @@ function addGame(req, res, next) {
 	};
 
 	newGame.save().then(() => {
-		res.status(200).send();
+		res.status(200).send(newGame);
 	}).catch(err => {
 		next(err);
 	});
@@ -44,6 +44,8 @@ function removeGame(req, res, next) {
 		if (!game) {
 			return req.status(500).end();
 		}
+	}).then(() => {
+		res.status(200).send();
 	}).catch(err => {
 		next(err);
 	});

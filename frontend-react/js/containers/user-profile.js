@@ -1,5 +1,5 @@
 const React = require('react'),
-	{ logout } = require('../actions'),
+	{ logout, removeGameFromBacklog } = require('../actions'),
 	BacklogList = require('../components/backlog-list'),
 	{ connect } = require('react-redux');
 
@@ -21,7 +21,10 @@ class UserProfile extends React.Component {
 				<button className='button' onClick={this.handleClick}>
 					Logout
 				</button>
-				<BacklogList games={this.props.games} />
+				<BacklogList
+					games={this.props.games}
+					removeGame={this.props.removeGame}
+				/>
 			</div>
 		);
 	}
@@ -37,6 +40,7 @@ function mapStateToProps(state, props) {
 function mapDispatchToProps(dispatch) {
 	return {
 		logoutUser: () => dispatch( logout() ),
+		removeGame: game => dispatch( removeGameFromBacklog(game) ),
 	};
 }
 

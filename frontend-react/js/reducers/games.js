@@ -5,6 +5,9 @@ const {
 		REQUEST_ADD_GAME,
 		ADD_GAME_SUCCESS,
 		ADD_GAME_FAILURE,
+		REQUEST_REMOVE_GAME,
+		REMOVE_GAME_SUCCESS,
+		REMOVE_GAME_FAILURE,
 	} = require('../action-types'),
 	merge = require('lodash.merge');
 
@@ -13,8 +16,11 @@ const initialState = {
 	loading: false,
 	error: false,	
 
-	addGameLoading: true,
+	addGameLoading: false,
 	addGameError: false,
+
+	removeGameLoading: false,
+	removeGameError: false,
 };
 
 function reducer(state = initialState, action) {
@@ -55,7 +61,38 @@ function reducer(state = initialState, action) {
 				addGameLoading: false,
 				addGameError: true,
 			});
-			
+
+		case REQUEST_REMOVE_GAME:
+			return merge({}, state, {	
+				removeGameLoading: true,
+				removeGameError: false,
+			});
+
+		case REMOVE_GAME_SUCCESS:
+			const newGameList = state.games.slice();
+			const index = newGameList.findIndex(game => {
+				// igdbId identifies unique game titles. _id only
+				// identifies unique game records; a single title
+				// could be reserved by multiple users, but each user
+				// can only backlog a single title once.
+				return game.igdbId === action.game.igdbId;
+			});
+
+			if (index >= 0) {
+				newGameList.splice(index, 1);
+			}
+
+			return merge({}, state, {
+				removeGameLoading: false,
+				games: newGameList,
+			});
+
+		case REMOVE_GAME_FAILURE:
+			return merge({}, state, {
+				removeGameLoading: false,
+				removeGameError: true,
+			});
+
 		default:
 			return state;
 	}
