@@ -47,6 +47,7 @@ function reducer(state = initialState, action) {
 		case ADD_GAME_SUCCESS:
 			return merge({}, state, {
 				addGameLoading: false,
+				games: [ ...state.games, action.game ],
 			});
 
 		case ADD_GAME_FAILURE:
