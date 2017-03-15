@@ -42,7 +42,7 @@ class SearchComponent extends React.Component {
 		
 		if (currentResults.length > 0) {
 			resultsList = (
-				<div className='search-results'>
+				<ul className='game-list'>
 					{currentResults.map(result => {
 						return (
 							<SearchResultItem
@@ -53,7 +53,7 @@ class SearchComponent extends React.Component {
 							/>
 						);
 					})}
-				</div>
+				</ul>
 			);
 		}
 		
@@ -101,7 +101,7 @@ function SearchResultItem({
 	if (isUserLoggedIn) {
 		addButton = (
 			<button
-				className='add-game-button'
+				className='button add-game-button'
 				onClick={handleClick}
 			>
 				Add Game
@@ -110,11 +110,11 @@ function SearchResultItem({
 	}
 
 	return (
-		<div>
+		<li className='game-list-item'>
 			<GameImage url={searchResult.cover && searchResult.cover.url} />
 			<span>{searchResult.name}</span>
 			{addButton}
-		</div>
+		</li>
 	);
 }
 

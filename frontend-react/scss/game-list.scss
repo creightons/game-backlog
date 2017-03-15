@@ -1,0 +1,18 @@
+@import 'constants';
+
+.game-list {
+	padding: 0;
+	list-style: none;
+}
+
+.game-list-item {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	color: $niagra;
+	font-size: $text-size-4; 
+	padding-top: 10px;
+	margin-bottom: 10px;
+	border-top: 1px solid $niagra;
+}
