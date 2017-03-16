@@ -30,9 +30,18 @@ function addGame(req, res, next) {
 			width: req.body.cover.width,
 		};
 	};
-
-	newGame.save().then(() => {
-		res.status(200).send(newGame);
+	Game.findOne({
+		igdbId: newGame.igdbId,
+		_owner: newGame._owner,
+	}).then(result => {
+		if (result) {
+			return res.status(409).send({ message: 'Game already exists' });
+		}
+		else {
+			return newGame.save().then(() => {
+				res.status(200).send(newGame);
+			});
+		}
 	}).catch(err => {
 		next(err);
 	});
