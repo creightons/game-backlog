@@ -12,7 +12,7 @@ const {
 	merge = require('lodash.merge');
 
 const initialState = {
-	games: [],
+	games: {},
 	loading: false,
 	error: false,	
 
@@ -33,9 +33,14 @@ function reducer(state = initialState, action) {
 			});
 
 		case REQUEST_GAMES_SUCCESS:
+			const gamesMap = {};
+
+			action.games.forEach(game => {
+				gamesMap[game.igdbId] = game;
+			});
 			return merge({}, state, {
 				loading: false,
-				games: action.games,
+				games: gamesMap,
 			});
 
 		case REQUEST_GAMES_FAILURE:
@@ -51,9 +56,11 @@ function reducer(state = initialState, action) {
 			});
 
 		case ADD_GAME_SUCCESS:
+			const newGameMap = {};
+			newGameMap[action.game.igdbId] = action.game;
 			return merge({}, state, {
 				addGameLoading: false,
-				games: [ ...state.games, action.game ],
+				games: newGameMap,
 			});
 
 		case ADD_GAME_FAILURE:
@@ -69,23 +76,21 @@ function reducer(state = initialState, action) {
 			});
 
 		case REMOVE_GAME_SUCCESS:
-			const newGameList = state.games.slice();
-			const index = newGameList.findIndex(game => {
-				// igdbId identifies unique game titles. _id only
-				// identifies unique game records; a single title
-				// could be reserved by multiple users, but each user
-				// can only backlog a single title once.
-				return game.igdbId === action.game.igdbId;
-			});
+			const reducedGamesMap = Object.assign({}, state.games);
+			
+			// igdbId identifies unique game titles. _id only
+			// identifies unique game records; a single title
+			// could be reserved by multiple users, but each user
+			// can only backlog a single title once.
+			delete reducedGamesMap[action.game.igdbId];
 
-			if (index >= 0) {
-				newGameList.splice(index, 1);
-			}
-
-			return merge({}, state, {
+			const totalReducedState = merge({}, state, {
 				removeGameLoading: false,
-				games: newGameList,
 			});
+
+			totalReducedState.games = reducedGamesMap;
+
+			return totalReducedState;
 
 		case REMOVE_GAME_FAILURE:
 			return merge({}, state, {

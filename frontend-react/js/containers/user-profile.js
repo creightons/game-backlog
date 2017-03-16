@@ -1,6 +1,7 @@
 const React = require('react'),
 	{ logout, removeGameFromBacklog } = require('../actions'),
 	BacklogList = require('../components/backlog-list'),
+	{ getBacklogGamesArray } = require('../selectors'),
 	{ connect } = require('react-redux');
 
 class UserProfile extends React.Component {
@@ -33,7 +34,7 @@ class UserProfile extends React.Component {
 function mapStateToProps(state, props) {
 	return {
 		username: state.user.username,
-		games: state.games.games,
+		games: getBacklogGamesArray(state),
 	};
 }
 

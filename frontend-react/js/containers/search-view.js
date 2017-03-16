@@ -73,6 +73,7 @@ function mapStateToProps(state, props) {
 		isNextEnabled: isNextEnabled(state),
 		isPreviousEnabled: isPreviousEnabled(state),
 		isUserLoggedIn: state.user.loggedIn,
+		backlog: state.games.games,
 	};
 }
 
@@ -98,6 +99,7 @@ function mergeProps(stateProps, dispatchProps, ownProps) {
 			isNextEnabled,
 			isPreviousEnabled,
 			isUserLoggedIn,
+			backlog,
 		} = stateProps,	
 		{
 			getPagedResults,
@@ -131,6 +133,7 @@ function mergeProps(stateProps, dispatchProps, ownProps) {
 	}
 
 	return {
+		backlog,
 		isNextEnabled,
 		isPreviousEnabled,
 		isUserLoggedIn,

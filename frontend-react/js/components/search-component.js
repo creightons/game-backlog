@@ -31,6 +31,7 @@ class SearchComponent extends React.Component {
 			previousButtonHandler,
 			isUserLoggedIn,
 			addGame,
+			backlog,
 		} = this.props;
 
 		let resultsList,
@@ -44,12 +45,19 @@ class SearchComponent extends React.Component {
 			resultsList = (
 				<ul className='game-list'>
 					{currentResults.map(result => {
+						let alreadyAdded = false;
+
+						if (backlog[ result.igdbId ]) {
+							alreadyAdded = true;
+						}
+
 						return (
 							<SearchResultItem
 								searchResult={result}
 								addGame={addGame}
 								isUserLoggedIn={isUserLoggedIn}
 								key={result.id}
+								alreadyAdded={alreadyAdded}
 							/>
 						);
 					})}
@@ -91,6 +99,7 @@ function SearchResultItem({
 	searchResult,
 	addGame,
 	isUserLoggedIn,
+	alreadyAdded
 }) {
 
 	function handleClick() {
@@ -99,14 +108,21 @@ function SearchResultItem({
 
 	let addButton;
 	if (isUserLoggedIn) {
-		addButton = (
-			<button
-				className='button add-game-button'
-				onClick={handleClick}
-			>
-				Add Game
-			</button>
-		);
+		if (alreadyAdded) {
+			addButton = (
+				<div>Already Added</div>
+			);
+		}
+		else {
+			addButton = (
+				<button
+					className='button add-game-button'
+					onClick={handleClick}
+				>
+					Add Game
+				</button>
+			);
+		}
 	}
 
 	return (
